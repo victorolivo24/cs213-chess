@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Base class for all chess pieces defining color, type, and move generation contract.
+ * Base class for every chess piece. Subclasses provide their geometry via
+ * {@link #generatePseudoLegalMoves(PositionView, Square)} while this class keeps track of color/type
+ * and exposes helpers commonly needed by all pieces.
  */
 public abstract class Piece {
     private final Color color;
@@ -23,6 +25,10 @@ public abstract class Piece {
         return type;
     }
 
+    /**
+     * Generates every move allowed by the piece's geometry without considering king safety.
+     * The Game class will filter these pseudo-legal moves to remove ones that leave the king in check.
+     */
     public abstract List<Move> generatePseudoLegalMoves(PositionView position, Square from);
 
     protected static boolean inBounds(int file, int rank) {
@@ -41,6 +47,10 @@ public abstract class Piece {
         return other != null && other.color == color;
     }
 
+    /**
+     * Read-only view of a board position. Board and its snapshots will implement this so pieces can
+     * ask what occupies a square while remaining decoupled from the concrete storage.
+     */
     public interface PositionView {
         Piece pieceAt(int file, int rank);
 

@@ -3,7 +3,10 @@ package chess;
 import java.util.Objects;
 
 /**
- * Immutable chess move from one square to another with optional promotion target.
+ * Immutable chess move from one square to another with an optional promotion target.
+ * <p>
+ * Pseudo-legal move generation will create these objects, and the Game layer will later decide
+ * whether a move is legal (e.g., king safety) or whether a promotion is valid.
  */
 public final class Move {
     private final Square from;
@@ -16,10 +19,16 @@ public final class Move {
         this.promotion = promotion;
     }
 
+    /**
+     * Basic move without promotion.
+     */
     public static Move of(Square from, Square to) {
         return new Move(from, to, null);
     }
 
+    /**
+     * Promotion move constructor, enforcing that only non-king, non-pawn targets are allowed.
+     */
     public static Move promotion(Square from, Square to, PieceType promotion) {
         if (promotion == null) {
             throw new IllegalArgumentException("Promotion piece type is required for promotion moves");

@@ -1,7 +1,7 @@
 package chess;
 
 /**
- * Types of chess pieces tracked throughout the engine.
+ * Enumerates the six chess piece types and exposes metadata useful during move handling.
  */
 public enum PieceType {
     KING('K'),
@@ -21,6 +21,9 @@ public enum PieceType {
         return algebraic;
     }
 
+    /**
+     * Used by promotion parsing to restrict the allowable upgrade targets.
+     */
     public boolean isPromotableTarget() {
         return this != KING && this != PAWN;
     }

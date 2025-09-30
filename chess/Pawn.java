@@ -3,6 +3,10 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Pawn handles forward pushes and diagonal captures. En passant and promotion will be layered on
+ * by the Game once it knows the surrounding context.
+ */
 public final class Pawn extends Piece {
     private static final int[] CAPTURE_DELTAS = {-1, 1};
 
@@ -17,11 +21,12 @@ public final class Pawn extends Piece {
         int file = from.file();
         int rank = from.rank();
 
-        // single push
+        // Single push straight ahead if empty.
         int forwardRank = rank + direction;
         if (inBounds(file, forwardRank) && position.isEmpty(file, forwardRank)) {
             moves.add(Move.of(from, square(file, forwardRank)));
 
+            // Double push from starting rank if both squares are empty.
             int startingRank = color() == Color.WHITE ? 1 : 6;
             int doubleRank = rank + (2 * direction);
             if (rank == startingRank && inBounds(file, doubleRank) && position.isEmpty(file, doubleRank)) {
@@ -29,7 +34,7 @@ public final class Pawn extends Piece {
             }
         }
 
-        // captures
+        // Captures diagonally forward.
         for (int df : CAPTURE_DELTAS) {
             int targetFile = file + df;
             int targetRank = rank + direction;

@@ -4,7 +4,10 @@ import java.util.Objects;
 
 /**
  * Immutable representation of a board coordinate expressed as file (column) and rank (row).
- * Files are zero-based (0 = 'a'), ranks are zero-based (0 = rank 1).
+ * <p>
+ * Internally we keep zero-based indices (0..7) so math is easy, but helper methods expose the
+ * algebraic chess notation (e.g., "e2"). This class is the single source of truth for translating
+ * between indices and human-readable strings.
  */
 public final class Square {
     private final int file; // 0..7 (a..h)
@@ -16,7 +19,7 @@ public final class Square {
     }
 
     /**
-     * Factory method for zero-based indices.
+     * Factory for zero-based indices used internally by the engine.
      */
     public static Square of(int fileIndex, int rankIndex) {
         validateRange(fileIndex, rankIndex);
@@ -24,7 +27,7 @@ public final class Square {
     }
 
     /**
-     * Parses an algebraic coordinate such as "e2" into a {@link Square}.
+     * Parses an algebraic coordinate such as "e2" into a {@link Square} instance.
      */
     public static Square fromAlgebraic(String notation) {
         Objects.requireNonNull(notation, "notation");
@@ -52,18 +55,30 @@ public final class Square {
         return rank;
     }
 
+    /**
+     * Returns the algebraic file letter, e.g., 0 -> 'a'.
+     */
     public char fileChar() {
         return (char) ('a' + file);
     }
 
+    /**
+     * Returns the human-facing rank number, e.g., 0 -> 1.
+     */
     public int rankNumber() {
         return rank + 1;
     }
 
+    /**
+     * Converts the coordinate back into algebraic format (e.g., "e2").
+     */
     public String toAlgebraic() {
         return "" + fileChar() + rankNumber();
     }
 
+    /**
+     * Guard utility shared by the factory methods to keep coordinates on the board.
+     */
     private static void validateRange(int fileIndex, int rankIndex) {
         if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7) {
             throw new IllegalArgumentException("File and rank must be in 0..7: " + fileIndex + "," + rankIndex);
