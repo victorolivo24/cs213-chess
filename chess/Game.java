@@ -3,16 +3,20 @@ package chess;
 import java.util.ArrayList;
 
 /**
- * TODO: Implement the full rules engine.
- * <p>
- * Game will own the mutable board state, track castling rights, en passant targets, player to move,
- * and expose methods for applying commands (normal move, resign, draw). It also needs helpers for
- * detecting check, checkmate, and illegal moves.
+ * Central rules engine that will manage the evolving game:
+ * <ul>
+ *   <li>Initialize the board via {@link Board#clear()} and {@link Board#setPiece(Square, Piece)}.</li>
+ *   <li>Track side to move, castling rights, and en passant availability.</li>
+ *   <li>Apply parsed {@link Command}s using {@link Move}, {@link Square}, and the piece hierarchy.</li>
+ *   <li>Detect special outcomes (check, checkmate, draw, resign).</li>
+ *   <li>Export the position as {@link ReturnPlay} snapshots for the CLI/autograder.</li>
+ * </ul>
+ * The concrete move handling is still to be implemented.
  */
 public class Game {
 
     public Game() {
-        // Full initialization will happen when the rules engine is implemented.
+        // TODO: set up initial board state when engine implementation begins.
     }
 
     /**
@@ -23,8 +27,8 @@ public class Game {
     }
 
     /**
-     * Helper used by Chess when parsing fails: simply report an illegal move while preserving board.
-     * Once the board representation exists, this will return the actual pieces.
+     * Helper used by Chess when parsing fails: report an illegal move without altering state.
+     * Once board export exists, this will return the true piece layout.
      */
     public ReturnPlay snapshotWithMessage(ReturnPlay.Message message) {
         ReturnPlay result = new ReturnPlay();
