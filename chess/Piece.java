@@ -1,7 +1,7 @@
 package chess;
 
 public abstract class Piece {
-    protected Color color;
+    protected final Color color;
     protected PieceType type;
 
     public Piece( Color color, PieceType type)
@@ -19,19 +19,20 @@ public abstract class Piece {
         return type;
     }
 
+    /**
+    *Checking if the move from one square to the other is valid
+    *according to this piece's movement rules. 
+    *@param board current board state
+    *@param from the starting square
+    *@param to the target square
+    *@return true if the move is valid, false otherwise
+    */
+
+
     public abstract boolean isValidMove(Board board, Square from, Square to);
 
     @Override
     public String toString() {
-        String prefix = color == Color.WHITE ? "w" : "b";
-        switch (type) {
-            case KING: return prefix + "K";
-            case QUEEN: return prefix + "Q";
-            case ROOK: return prefix + "R";
-            case BISHOP: return prefix + "B";
-            case KNIGHT: return prefix + "K";
-            case PAWN: return prefix + "P";
-            default: return prefix + "?";
+        return color + "_" + type;
         }
     }
-}
