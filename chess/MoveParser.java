@@ -37,7 +37,7 @@ public final class MoveParser {
             trimmed = trimmed.substring(0, trimmed.length() - " draw?".length()).trim();
         }
 
-        String[] tokens = trimmed.split("\s+");
+        String[] tokens = trimmed.split("\\s+");
         if (tokens.length < 2 || tokens.length > 3) {
             throw new IllegalArgumentException("Move must be <from> <to> [promo]");
         }
